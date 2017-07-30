@@ -246,7 +246,7 @@ class Bug extends \Ilch\Mapper
         $internOnly = mysqli_real_escape_string($link, $internOnly);
 
 
-        $query = "UPDATE bugs SET
+        $query = "UPDATE [prefix]_bugs SET
                     `sub_category_id` = ?,
                     `title`= ?,
                     `description`= ?,
@@ -273,7 +273,7 @@ class Bug extends \Ilch\Mapper
         $statusID = mysqli_real_escape_string($link, $statusID);
         $internOnly = mysqli_real_escape_string($link, $internOnly);
 
-        $query = "INSERT INTO bugs (`sub_category_id`, `title`, `description`, `priority`, `creator_id`, `progress`, `status_id`, `intern_only`, `update_time`, `create_time`) VALUES
+        $query = "INSERT INTO [prefix]_bugs (`sub_category_id`, `title`, `description`, `priority`, `creator_id`, `progress`, `status_id`, `intern_only`, `update_time`, `create_time`) VALUES
                   (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
         $stmt = $link->prepare($query);
         $stmt->bind_param('issiiiii', $subCategory, $title, $description, $priority, $creatorID, $progress, $statusID, $internOnly);
@@ -288,7 +288,7 @@ class Bug extends \Ilch\Mapper
 
         $bugID = mysqli_real_escape_string($link, $bugID);
 
-        $query = "DELETE FROM bugs WHERE id = ?";
+        $query = "DELETE FROM [prefix]_bugs WHERE id = ?";
         $stmt = $link->prepare($query);
         $stmt->bind_param('i', $bugID);
         $stmt->execute();
@@ -299,7 +299,7 @@ class Bug extends \Ilch\Mapper
         $postID = $this->db()->escape($postID);
         $userID = $this->db()->escape($userID);
 
-        $query = "DELETE FROM bugtracker_votes WHERE bug_id = $postID AND user_id = $userID";
+        $query = "DELETE FROM [prefix]_bugtracker_votes WHERE bug_id = $postID AND user_id = $userID";
         $this->db()->query($query);
     }
 
@@ -308,7 +308,7 @@ class Bug extends \Ilch\Mapper
         $postID = $this->db()->escape($postID);
         $userID = $this->db()->escape($userID);
 
-        $query = "INSERT INTO bugtracker_votes (bug_id, user_id, type) VALUES ($postID, $userID, 'like')";
+        $query = "INSERT INTO [prefix]_bugtracker_votes (bug_id, user_id, type) VALUES ($postID, $userID, 'like')";
         $this->db()->query($query);
     }
 
@@ -317,13 +317,13 @@ class Bug extends \Ilch\Mapper
         $postID = $this->db()->escape($postID);
         $userID = $this->db()->escape($userID);
 
-        $query = "INSERT INTO bugtracker_votes (bug_id, user_id, type) VALUES ($postID, $userID, 'dislike')";
+        $query = "INSERT INTO [prefix]_bugtracker_votes (bug_id, user_id, type) VALUES ($postID, $userID, 'dislike')";
         $this->db()->query($query);
     }
 
     public function userIsLiker($postID, $userID)
     {
-        $query = "SELECT * FROM bugtracker_votes WHERE user_id = $userID AND bug_id = $postID AND type = 'like'";
+        $query = "SELECT * FROM [prefix]_bugtracker_votes WHERE user_id = $userID AND bug_id = $postID AND type = 'like'";
         $res = $this->db()->query($query);
 
         if(mysqli_num_rows($res) > 0)
@@ -336,7 +336,7 @@ class Bug extends \Ilch\Mapper
 
     public function userIsDisliker($postID, $userID)
     {
-        $query = "SELECT * FROM bugtracker_votes WHERE user_id = $userID AND bug_id = $postID AND type = 'dislike'";
+        $query = "SELECT * FROM [prefix]_bugtracker_votes WHERE user_id = $userID AND bug_id = $postID AND type = 'dislike'";
         $res = $this->db()->query($query);
 
         if(mysqli_num_rows($res) > 0)
@@ -352,7 +352,7 @@ class Bug extends \Ilch\Mapper
         $link = $this->db()->getLink();
         $bugID = mysqli_real_escape_string($link, $bugID);
 
-        $query = "SELECT * FROM bugtracker_votes WHERE bug_id = ? AND type = 'like'";
+        $query = "SELECT * FROM [prefix]_bugtracker_votes WHERE bug_id = ? AND type = 'like'";
         $stmt = $link->prepare($query);
         $stmt->bind_param('i', $bugID);
         $stmt->execute();
@@ -375,7 +375,7 @@ class Bug extends \Ilch\Mapper
         $link = $this->db()->getLink();
         $bugID = mysqli_real_escape_string($link, $bugID);
 
-        $query = "SELECT * FROM bugtracker_votes WHERE bug_id = ? AND type = 'dislike'";
+        $query = "SELECT * FROM [prefix]_bugtracker_votes WHERE bug_id = ? AND type = 'dislike'";
         $stmt = $link->prepare($query);
         $stmt->bind_param('i', $bugID);
         $stmt->execute();
@@ -398,7 +398,7 @@ class Bug extends \Ilch\Mapper
         $link = $this->db()->getLink();
         $bugID = mysqli_real_escape_string($link, $bugID);
 
-        $query = "SELECT * FROM bugtracker_assigned_users WHERE bug_id = ?";
+        $query = "SELECT * FROM [prefix]_bugtracker_assigned_users WHERE bug_id = ?";
         $stmt = $link->prepare($query);
         $stmt->bind_param('i', $bugID);
         $stmt->execute();
@@ -420,7 +420,7 @@ class Bug extends \Ilch\Mapper
     {
         $link = $this->db()->getLink();
 
-        $query = "INSERT INTO bugtracker_assigned_users (bug_id, user_id) VALUES (?, ?)";
+        $query = "INSERT INTO [prefix]_bugtracker_assigned_users (bug_id, user_id) VALUES (?, ?)";
         $stmt = $link->prepare($query);
 
         $stmt->bind_param('ii', $bugID, $userID);
@@ -431,7 +431,7 @@ class Bug extends \Ilch\Mapper
     {
         $link = $this->db()->getLink();
 
-        $query = "DELETE FROM bugtracker_assigned_users WHERE bug_id = ? AND user_id = ?";
+        $query = "DELETE FROM [prefix]_bugtracker_assigned_users WHERE bug_id = ? AND user_id = ?";
         $stmt = $link->prepare($query);
 
         $stmt->bind_param('ii', $bugID, $userID);

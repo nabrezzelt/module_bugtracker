@@ -22,7 +22,7 @@ class SubCategory extends \Ilch\Mapper
         $res = $this->db()->query($query);
 
         $i = 0;
-        $subCategories[] = array();
+        $subCategories = array();
 
         while ($row = mysqli_fetch_assoc($res))
         {

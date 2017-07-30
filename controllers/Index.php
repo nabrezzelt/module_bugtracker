@@ -397,4 +397,68 @@ class Index extends \Ilch\Controller\Frontend
 
         $this->redirect(['module' => 'bugtracker', 'controller' => 'index', 'action' => 'show', 'bug-id' => $bug->getID()]);
     }
+
+    public function editCommentAction()
+    {
+        $commentMapper = new CommentMapper();
+
+        $commentID = $this->getRequest()->getParam('comment-id');
+        $comment = $commentMapper->getCommentByID($commentID);
+
+        $user = $this->getUser();
+
+        if(isset($user) && ($comment->getUser()->getID() == $user->getID() || $user->isAdmin()))
+        {
+            $this->getView()->set('comment', $comment);
+        }
+        else
+        {
+            if(isset($comment))
+            {
+                $this->redirect(['module' => 'bugtracker', 'controller' => 'index', 'action' => 'show', 'bug-id' => $comment->getBugID()]);
+            }
+            else
+            {
+            	$this->redirect(['module' => 'bugtracker', 'controller' => 'index', 'action' => 'index']);
+            }
+        }
+    }
+
+    public function saveCommentAction()
+    {
+        $commentID = $this->getRequest()->getParam('comment-id');
+        $content = $this->getRequest()->getPost('content');
+        $internOnly = $this->getRequest()->getPost('intern-only');
+
+        if(isset($user) && isset($commentID) && isset($content))
+        {
+            $commentMapper = new CommentMapper();
+            $comment = $commentMapper->getCommentByID($commentID);
+
+            if(!($comment->getUser()->getID() == $user->getID() || $user->isAdmin()))
+                $this->redirect(['module' => 'bugtracker', 'controller' => 'index', 'action' => 'show', 'bug-id' => $comment->getBugID()]);
+
+            if(!isset($internOnly))
+                $internOnly = 0;
+            var_dump($commentID, $content, $internOnly);
+
+            $commentMapper->saveComment($commentID, $content, $internOnly);
+
+            $this->redirect(['module' => 'bugtracker', 'controller' => 'index', 'action' => 'show', 'bug-id' => $comment->getBugID()]);
+        }
+    }
+
+    public function deleteCommentAction()
+    {
+        $commentID = $this->getRequest()->getParam('comment-id');
+
+        if(isset($commentID) && isset($user) && $user->isAdmin())
+        {
+            $commentMapper = new CommentMapper();
+            $comment = $commentMapper->getCommentByID($commentID);
+            $commentMapper->deleteComment($commentID);
+
+            $this->redirect(['module' => 'bugtracker', 'controller' => 'index', 'action' => 'show', 'bug-id' => $comment->getBugID()]);
+        }
+    }
 }
