@@ -22,7 +22,6 @@ class Bug extends \Ilch\Mapper
     {
         $userMapper = new UserMapper();
         $commentMapper = new CommentMapper();
-        $attachmentMapper = new AttachmentMapper();
 
         $link = $this->db()->getLink();
 
@@ -60,9 +59,8 @@ class Bug extends \Ilch\Mapper
             $createTime = new Date($row['create_time']);
 
             $comments = $commentMapper->getAllCommentsByBugID($bugID);
-            $attachments = $attachmentMapper->getAllAttachmentsByBugID($bugID);
 
-            $bugs[$i] = new BugModel($bugID, $subCategory, $priority, $title, $description, $user, $assignedUsers, $progress, $status, $likes, $dislikes, $internOnly, $updateTime, $createTime, $comments, $attachments);
+            $bugs[$i] = new BugModel($bugID, $subCategory, $priority, $title, $description, $user, $assignedUsers, $progress, $status, $likes, $dislikes, $internOnly, $updateTime, $createTime, $comments);
             $i++;
         }
 
@@ -73,7 +71,6 @@ class Bug extends \Ilch\Mapper
     {
         $userMapper = new UserMapper();
         $commentMapper = new CommentMapper();
-        $attachmentMapper = new AttachmentMapper();
 
         $link = $this->db()->getLink();
 
@@ -118,16 +115,14 @@ class Bug extends \Ilch\Mapper
         $createTime = new Date($row['create_time']);
 
         $comments = $commentMapper->getAllCommentsByBugID($bugID);
-        $attachments = $attachmentMapper->getAllAttachmentsByBugID($bugID);
 
-        return new BugModel($bugID, $subCategory, $priority, $title, $description, $user, $assignedUsers, $progress, $status, $likes, $dislikes, $internOnly, $updateTime, $createTime, $comments, $attachments);
+        return new BugModel($bugID, $subCategory, $priority, $title, $description, $user, $assignedUsers, $progress, $status, $likes, $dislikes, $internOnly, $updateTime, $createTime, $comments);
     }
 
     public function getAllBugsByFilter($keywords, $status, $category, $sub_category, $my_reports, $filter_internal_reports_only)
     {
         $userMapper = new UserMapper();
         $commentMapper = new CommentMapper();
-        $attachmentMapper = new AttachmentMapper();
 
         $link = $this->db()->getLink();
 
@@ -229,9 +224,8 @@ class Bug extends \Ilch\Mapper
             $createTime = new Date($row['create_time']);
 
             $comments = $commentMapper->getAllCommentsByBugID($bugID);
-            $attachments = $attachmentMapper->getAllAttachmentsByBugID($bugID);
 
-            $bugs[$i] = new BugModel($bugID, $subCategory, $priority, $title, $description, $user, $assignedUsers, $progress, $status, $likes, $dislikes, $internOnly, $updateTime, $createTime, $comments, $attachments);
+            $bugs[$i] = new BugModel($bugID, $subCategory, $priority, $title, $description, $user, $assignedUsers, $progress, $status, $likes, $dislikes, $internOnly, $updateTime, $createTime, $comments);
             $i++;
         }
 

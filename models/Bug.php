@@ -51,14 +51,9 @@ class Bug extends \Ilch\Model
      * @var Comment[]
      */
     private $comments;
+  
 
-    /**
-     * Attachments of the Bug
-     * @var Attachment[]
-     */
-    private $attachments;
-
-    function __construct($id, $subCategory, $priority, $title, $description, $user, $assignedUsers, $progress, $status, $likes, $dislikes, $internOnly, $updateTime, $createTime, $comments, $attachments)
+    function __construct($id, $subCategory, $priority, $title, $description, $user, $assignedUsers, $progress, $status, $likes, $dislikes, $internOnly, $updateTime, $createTime, $comments)
     {
         $this->id = $id;
         $this->subCategory = $subCategory;
@@ -75,8 +70,7 @@ class Bug extends \Ilch\Model
         $this->internOnly = $internOnly;
         $this->createTime = $createTime;
 
-        $this->comments = $comments;
-        $this->attachments = $attachments;
+        $this->comments = $comments;  
     }
 
     public function getID()
@@ -168,10 +162,5 @@ class Bug extends \Ilch\Model
     public function getComments()
     {
         return $this->comments;
-    }
-
-    public function getAttachments()
-    {
-        return $this->attachments;
-    }
+    }  
 }
