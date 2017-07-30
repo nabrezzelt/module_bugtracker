@@ -50,7 +50,8 @@ class Comment extends \Ilch\Mapper
     {
         $link = $this->db()->getLink();
 
-        $query = "INSERT INTO bugtracker_comments (`bug_id`, `content`, `poster_id`, `intern_only`) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO [prefix]_bugtracker_comments (`bug_id`, `content`, `poster_id`, `intern_only`) VALUES (?, ?, ?, ?)";
+        $query = $this->db()->getSqlWithPrefix($query);
         $stmt = $link->prepare($query);
         $stmt->bind_param('isii', $bugID, $content, $userID, $internOnly);
         var_dump($bugID, $content, $userID, $internOnly);

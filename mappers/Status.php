@@ -16,7 +16,8 @@ class Status extends \Ilch\Mapper
     {
         $link = $this->db()->getLink();
 
-        $query = "SELECT * FROM bugtracker_status";
+        $query = "SELECT * FROM [prefix]_bugtracker_status";
+        $query = $this->db()->getSqlWithPrefix($query);
         $stmt = $link->prepare($query);
         $stmt->execute();
 

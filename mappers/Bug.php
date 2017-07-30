@@ -23,20 +23,18 @@ class Bug extends \Ilch\Mapper
         $userMapper = new UserMapper();
         $commentMapper = new CommentMapper();
 
-        $link = $this->db()->getLink();
 
-
-        $query = "SELECT bugs.`id`, `sub_category_id`, bugtracker_sub_categories.name AS sub_category_name, bugtracker_sub_categories.category_id,
-	                  bugtracker_categories.name AS category_name, `title`, `description`, `priority`, `creator_id`, `progress`,
-                      `status_id`, bugtracker_status.name AS status_name, bugtracker_status.css_class AS status_css_class, `intern_only`, `update_time`, `create_time`
-                  FROM bugs
-                  JOIN bugtracker_status
-	                  ON bugs.status_id = bugtracker_status.id
-                  JOIN bugtracker_sub_categories
-	                  ON bugs.sub_category_id = bugtracker_sub_categories.id
-                  JOIN bugtracker_categories
-                  ON bugtracker_sub_categories.category_id = bugtracker_categories.id";
-        $res = mysqli_query($link, $query);
+        $query = "SELECT [prefix]_bugs.`id`, `sub_category_id`, [prefix]_bugtracker_sub_categories.name AS sub_category_name, [prefix]_bugtracker_sub_categories.category_id,
+	                  [prefix]_bugtracker_categories.name AS category_name, `title`, `description`, `priority`, `creator_id`, `progress`,
+                      `status_id`, [prefix]_bugtracker_status.name AS status_name, [prefix]_bugtracker_status.css_class AS status_css_class, `intern_only`, `update_time`, `create_time`
+                  FROM [prefix]_bugs
+                  JOIN [prefix]_bugtracker_status
+	                  ON [prefix]_bugs.status_id = [prefix]_bugtracker_status.id
+                  JOIN [prefix]_bugtracker_sub_categories
+	                  ON [prefix]_bugs.sub_category_id = [prefix]_bugtracker_sub_categories.id
+                  JOIN [prefix]_bugtracker_categories
+                  ON [prefix]_bugtracker_sub_categories.category_id = [prefix]_bugtracker_categories.id";
+        $res = $this->db()->query($query);
 
         $i = 0;
         $bugs = array();
@@ -75,17 +73,18 @@ class Bug extends \Ilch\Mapper
         $link = $this->db()->getLink();
 
 
-        $query = "SELECT bugs.`id`, `sub_category_id`, bugtracker_sub_categories.name AS sub_category_name, bugtracker_sub_categories.category_id,
-	                  bugtracker_categories.name AS category_name, `title`, `description`, `priority`, `creator_id`,
-	                  `progress`, `status_id`, bugtracker_status.name AS status_name, bugtracker_status.css_class AS status_css_class, `intern_only`, `update_time`, `create_time`
-                  FROM bugs
-                  JOIN bugtracker_status
-	                  ON bugs.status_id = bugtracker_status.id
-                  JOIN bugtracker_sub_categories
-	                  ON bugs.sub_category_id = bugtracker_sub_categories.id
-                  JOIN bugtracker_categories
-                  ON bugtracker_sub_categories.category_id = bugtracker_categories.id
-                  WHERE bugs.id = ?";
+        $query = "SELECT [prefix]_bugs.`id`, `sub_category_id`, [prefix]_bugtracker_sub_categories.name AS sub_category_name, [prefix]_bugtracker_sub_categories.category_id,
+	                  [prefix]_bugtracker_categories.name AS category_name, `title`, `description`, `priority`, `creator_id`,
+	                  `progress`, `status_id`, [prefix]_bugtracker_status.name AS status_name, [prefix]_bugtracker_status.css_class AS status_css_class, `intern_only`, `update_time`, `create_time`
+                  FROM [prefix]_bugs
+                  JOIN [prefix]_bugtracker_status
+	                  ON [prefix]_bugs.status_id = [prefix]_bugtracker_status.id
+                  JOIN [prefix]_bugtracker_sub_categories
+	                  ON [prefix]_bugs.sub_category_id = [prefix]_bugtracker_sub_categories.id
+                  JOIN [prefix]_bugtracker_categories
+                  ON [prefix]_bugtracker_sub_categories.category_id = [prefix]_bugtracker_categories.id
+                  WHERE [prefix]_bugs.id = ?";
+        $query = $this->db()->getSqlWithPrefix($query);
         $stmt = $link->prepare($query);
         $stmt->bind_param('i', $bugID);
         $stmt->execute();
@@ -184,17 +183,18 @@ class Bug extends \Ilch\Mapper
         }
 
 
-        $query = "SELECT bugs.`id`, `sub_category_id`, bugtracker_sub_categories.name AS sub_category_name, bugtracker_sub_categories.category_id,
-	                  bugtracker_categories.name AS category_name, `title`, `description`, `priority`, `creator_id`,
-	                  `progress`, `status_id`, bugtracker_status.name AS status_name, bugtracker_status.css_class AS status_css_class, `intern_only`, `update_time`, `create_time`
-                  FROM bugs
-                  JOIN bugtracker_status
-	                  ON bugs.status_id = bugtracker_status.id
-                  JOIN bugtracker_sub_categories
-	                  ON bugs.sub_category_id = bugtracker_sub_categories.id
-                  JOIN bugtracker_categories
-                  ON bugtracker_sub_categories.category_id = bugtracker_categories.id
+        $query = "SELECT [prefix]_bugs.`id`, `sub_category_id`, [prefix]_bugtracker_sub_categories.name AS sub_category_name, [prefix]_bugtracker_sub_categories.category_id,
+	                  [prefix]_bugtracker_categories.name AS category_name, `title`, `description`, `priority`, `creator_id`,
+	                  `progress`, `status_id`, [prefix]_bugtracker_status.name AS status_name, [prefix]_bugtracker_status.css_class AS status_css_class, `intern_only`, `update_time`, `create_time`
+                  FROM [prefix]_bugs
+                  JOIN [prefix]_bugtracker_status
+	                  ON [prefix]_bugs.status_id = [prefix]_bugtracker_status.id
+                  JOIN [prefix]_bugtracker_sub_categories
+	                  ON [prefix]_bugs.sub_category_id = [prefix]_bugtracker_sub_categories.id
+                  JOIN [prefix]_bugtracker_categories
+                  ON [prefix]_bugtracker_sub_categories.category_id = [prefix]_bugtracker_categories.id
                   WHERE (title LIKE '$keywords' OR description LIKE '$keywords')" . $status_SQL . $sub_category_SQL . $category_SQL . $my_report_SQL . $internal_reports_only_SQL;
+        $query = $this->db()->getSqlWithPrefix($query);
         $stmt = $link->prepare($query);
         $stmt->bind_param('iii', $status, $sub_category, $category);
 

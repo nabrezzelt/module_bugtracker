@@ -14,11 +14,11 @@ class SubCategory extends \Ilch\Mapper
 {
     public function getAllSubCategories()
     {
-        $query = "SELECT bugtracker_sub_categories.id as sub_category_id, bugtracker_sub_categories.name AS sub_category_name,
-                    bugtracker_sub_categories.category_id, bugtracker_categories.name AS category_name
-                  FROM bugtracker_sub_categories
-                  JOIN bugtracker_categories
-                  ON bugtracker_sub_categories.category_id = bugtracker_categories.id";
+        $query = "SELECT [prefix]_bugtracker_sub_categories.id AS sub_category_id, [prefix]_bugtracker_sub_categories.name AS sub_category_name,
+                    [prefix]_bugtracker_sub_categories.category_id, [prefix]_bugtracker_categories.name AS category_name
+                  FROM [prefix]_bugtracker_sub_categories
+                  JOIN [prefix]_bugtracker_categories
+                  ON [prefix]_bugtracker_sub_categories.category_id = [prefix]_bugtracker_categories.id";
         $res = $this->db()->query($query);
 
         $i = 0;
@@ -31,5 +31,5 @@ class SubCategory extends \Ilch\Mapper
         }
 
         return $subCategories;
-    }    
+    }
 }
