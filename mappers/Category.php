@@ -31,11 +31,11 @@ class Category extends \Ilch\Mapper
     public function getCategoryByID($id)
     {
         $link = $this->db()->getLink();
-        //https://stackoverflow.com/questions/60174/how-can-i-prevent-sql-injection-in-php?lq=1
 
         $id = mysqli_real_escape_string($link, $id);
 
         $query = "SELCET * FROM [prefix]_bugtracker_categories WHERE id = ?";
+        $query = $this->db->getSqlWithPrefix($query);
         $stmt = $link->prepare($query);
         $stmt->bind_param('i', $id);
         $stmt->execute();

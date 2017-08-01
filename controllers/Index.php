@@ -372,10 +372,10 @@ class Index extends \Ilch\Controller\Frontend
 
         $userWasLiker = $bugMapper->userIsLiker($bugID, $userID);
 
-        $bugMapper->removeLikeDislikeFromPost($bugID, $userID);
+        $bugMapper->removeLikeDislikeFromBug($bugID, $userID);
 
         if(!$userWasLiker)
-            $bugMapper->likePost($bugID, $userID);
+            $bugMapper->likeBug($bugID, $userID);
 
         $this->redirect(['module' => 'bugtracker', 'controller' => 'index', 'action' => 'show', 'bug-id' => $bug->getID()]);
     }
@@ -390,10 +390,10 @@ class Index extends \Ilch\Controller\Frontend
 
         $userWasDisliker = $bugMapper->userIsDisliker($bugID, $userID);
 
-        $bugMapper->removeLikeDislikeFromPost($bugID, $userID);
+        $bugMapper->removeLikeDislikeFromBug($bugID, $userID);
 
         if(!$userWasDisliker)
-            $bugMapper->dislikePost($bugID, $userID);
+            $bugMapper->dislikeBug($bugID, $userID);
 
         $this->redirect(['module' => 'bugtracker', 'controller' => 'index', 'action' => 'show', 'bug-id' => $bug->getID()]);
     }

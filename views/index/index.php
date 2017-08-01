@@ -19,7 +19,7 @@
         <h1>Bugtracker</h1> 
     </div>
     <div class="col-sm-6 text-right">
-        <a class='btn btn-success' href='<?php echo $this->getUrl([' module'=> 'bugtracker', 'controller' => 'index', 'action' => 'new']); ?>'>New Issue</a>
+        <a class='btn btn-success' href='<?php echo $this->getUrl(['module'=> 'bugtracker', 'controller' => 'index', 'action' => 'new']); ?>'>New Issue</a>
     </div>
 </div>    
 <div class="row">
