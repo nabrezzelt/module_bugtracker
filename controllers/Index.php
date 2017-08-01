@@ -426,8 +426,11 @@ class Index extends \Ilch\Controller\Frontend
 
     public function saveCommentAction()
     {
+        $user = $this->getUser();
+
         $commentID = $this->getRequest()->getParam('comment-id');
         $content = $this->getRequest()->getPost('content');
+        $content = nl2br($content);
         $internOnly = $this->getRequest()->getPost('intern-only');
 
         if(isset($user) && isset($commentID) && isset($content))
@@ -440,7 +443,6 @@ class Index extends \Ilch\Controller\Frontend
 
             if(!isset($internOnly))
                 $internOnly = 0;
-            var_dump($commentID, $content, $internOnly);
 
             $commentMapper->saveComment($commentID, $content, $internOnly);
 
