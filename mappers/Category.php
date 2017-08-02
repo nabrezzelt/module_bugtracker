@@ -34,8 +34,8 @@ class Category extends \Ilch\Mapper
 
         $id = mysqli_real_escape_string($link, $id);
 
-        $query = "SELCET * FROM [prefix]_bugtracker_categories WHERE id = ?";
-        $query = $this->db->getSqlWithPrefix($query);
+        $query = "SELECT * FROM [prefix]_bugtracker_categories WHERE id = ?";
+        $query = $this->db()->getSqlWithPrefix($query);
         $stmt = $link->prepare($query);
         $stmt->bind_param('i', $id);
         $stmt->execute();
@@ -44,5 +44,45 @@ class Category extends \Ilch\Mapper
         $row = mysqli_fetch_assoc($res);
 
         return new CategoryModel($row['id'], $row['name']);
+    }
+
+    public function createCategory($name)
+    {
+        $link = $this->db()->getLink();
+
+        $name = mysqli_real_escape_string($link, $name);
+
+        $query = "INSERT INTO [prefix]_bugtracker_categories (name) VALUES (?)";
+        $query = $this->db()->getSqlWithPrefix($query);
+        $stmt = $link->prepare($query);
+        $stmt->bind_param('s', $name);
+        $stmt->execute();
+    }
+
+    public function saveCategory($categoryID, $name)
+    {
+        $link = $this->db()->getLink();
+
+        $categoryID = mysqli_real_escape_string($link, $categoryID);
+        $name = mysqli_real_escape_string($link, $name);
+
+        $query = "UPDATE [prefix]_bugtracker_categories SET name = ? WHERE id = ?";
+        $query = $this->db()->getSqlWithPrefix($query);
+        $stmt = $link->prepare($query);
+        $stmt->bind_param('si', $name, $categoryID);
+        $stmt->execute();
+    }
+
+    public function deleteCategory($categoryID)
+    {
+        $link = $this->db()->getLink();
+
+        $categoryID = mysqli_real_escape_string($link, $categoryID);
+
+        $query = "DELETE FROM [prefix]_bugtracker_categories WHERE id = ?";
+        $query = $this->db()->getSqlWithPrefix($query);
+        $stmt = $link->prepare($query);
+        $stmt->bind_param('i', $categoryID);
+        $stmt->execute();
     }
 }

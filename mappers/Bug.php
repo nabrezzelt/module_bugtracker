@@ -299,6 +299,36 @@ class Bug extends \Ilch\Mapper
         $stmt->execute();
     }
 
+    public function deleteBugByCategoryID($categoryID)
+    {
+        $link = $this->db()->getLink();
+
+        $categoryID = mysqli_real_escape_string($link, $categoryID);
+
+        $query = "DELETE b.*
+                  FROM [prefix]_bugs AS b
+                  LEFT JOIN [prefix]_bugtracker_sub_categories sc
+                  ON b.sub_category_id = sc.id
+                  WHERE sc.category_id = ?";
+        $query = $this->db()->getSqlWithPrefix($query);
+        $stmt = $link->prepare($query);
+        $stmt->bind_param('i', $categoryID);
+        $stmt->execute();
+    }
+
+    public function deleteBugBySubCategoryID($subCategoryID)
+    {
+        $link = $this->db()->getLink();
+
+        $subCategoryID = mysqli_real_escape_string($link, $subCategoryID);
+
+        $query = "DELETE FROM [prefix]_bugs WHERE sub_category_id = ?";
+        $query = $this->db()->getSqlWithPrefix($query);
+        $stmt = $link->prepare($query);
+        $stmt->bind_param('i', $subCategoryID);
+        $stmt->execute();
+    }
+
     public function removeLikeDislikeFromBug($bugID, $userID)
     {
         $link = $this->db()->getLink();
@@ -476,10 +506,48 @@ class Bug extends \Ilch\Mapper
         $link = $this->db()->getLink();
 
         $query = "DELETE FROM [prefix]_bugtracker_assigned_users WHERE bug_id = ? AND user_id = ?";
-        $query = $this->db->getSqlWithPrefix($query);
+        $query = $this->db()->getSqlWithPrefix($query);
         $stmt = $link->prepare($query);
 
         $stmt->bind_param('ii', $bugID, $userID);
+        $stmt->execute();
+    }
+
+    public function removeAssigneesByCategoryID($categoryID)
+    {
+        $link = $this->db()->getLink();
+
+        $categoryID = mysqli_real_escape_string($link, $categoryID);
+
+        $query = "DELETE au.*
+                  FROM [prefix]_bugtracker_assigned_users AS au
+                  JOIN [prefix]_bugs
+                  ON [prefix]_bugs.id = au.bug_id
+                  LEFT JOIN [prefix]_bugtracker_sub_categories
+                  ON [prefix]_bugs.sub_category_id = [prefix]_bugtracker_sub_categories.id
+                  WHERE [prefix]_bugtracker_sub_categories.category_id = ?";
+        $query = $this->db()->getSqlWithPrefix($query);
+        $stmt = $link->prepare($query);
+
+        $stmt->bind_param('i', $categoryID);
+        $stmt->execute();
+    }
+
+    public function removeAssigneeBySubCategoryID($subCategoryID)
+    {
+        $link = $this->db()->getLink();
+
+        $subCategoryID = mysqli_real_escape_string($link, $subCategoryID);
+
+        $query = "DELETE au.*
+                    FROM [prefix]_bugtracker_assigned_users AS au
+                    JOIN [prefix]_bugs
+                    ON [prefix]_bugs.id = au.bug_id
+                    WHERE [prefix]_bugs.sub_category_id = ?";
+        $query = $this->db()->getSqlWithPrefix($query);
+        $stmt = $link->prepare($query);
+
+        $stmt->bind_param('i', $subCategoryID);
         $stmt->execute();
     }
 }

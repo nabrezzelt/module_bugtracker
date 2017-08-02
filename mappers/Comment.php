@@ -93,7 +93,7 @@ class Comment extends \Ilch\Mapper
         $commentID = mysqli_real_escape_string($link, $commentID);
         $content = mysqli_real_escape_string($link, $content);
         $internOnly = mysqli_real_escape_string($link, $internOnly);
-     
+
         $query = "UPDATE [prefix]_bugtracker_comments SET content = ?, intern_only = ? WHERE id = ?";
         $query = $this->db()->getSqlWithPrefix($query);
         var_dump($query);
@@ -113,6 +113,42 @@ class Comment extends \Ilch\Mapper
         $query = $this->db()->getSqlWithPrefix($query);
         $stmt = $link->prepare($query);
         $stmt->bind_param('i', $commentID);
+        $stmt->execute();
+    }
+
+    public function deleteCommentsByCategoryID($categoryID)
+    {
+        $link = $this->db()->getLink();
+
+        $categoryID = mysqli_real_escape_string($link, $categoryID);
+
+        $query = "DELETE c.*
+                  FROM [prefix]_bugtracker_comments AS c
+                  JOIN [prefix]_bugs
+                  ON [prefix]_bugs.id = c.bug_id
+                  LEFT JOIN [prefix]_bugtracker_sub_categories
+                  ON [prefix]_bugs.sub_category_id = [prefix]_bugtracker_sub_categories.id
+                  WHERE [prefix]_bugtracker_sub_categories.category_id = ?";
+        $query = $this->db()->getSqlWithPrefix($query);
+        $stmt = $link->prepare($query);
+        $stmt->bind_param('i', $categoryID);
+        $stmt->execute();
+    }
+
+    public function deleteCommentsBySubCategoryID($subCategoryID)
+    {
+        $link = $this->db()->getLink();
+
+        $subCategoryID = mysqli_real_escape_string($link, $subCategoryID);
+
+        $query = "DELETE *
+                    FROM [prefix]_bugtracker_comments
+                    JOIN [prefix]_bugs
+                    ON [prefix]_bugtracker_comments.bug_id = [prefix]_bugs.id
+                    WHERE [prefix]_bugs.sub_category_id = ?";
+        $query = $this->db()->getSqlWithPrefix($query);
+        $stmt = $link->prepare($query);
+        $stmt->bind_param('i', $subCategoryID);
         $stmt->execute();
     }
 }
